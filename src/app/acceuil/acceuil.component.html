@@ -1,0 +1,950 @@
+<app-header></app-header>
+
+<section class="bloc_home">
+  <div class="movie_day">
+    <img #image class="background-image" src="{{tmdbBackdropUrl}}{{movies[1].backdrop_path}}" alt="">
+    <div class="content-overlay">
+      <!-- Contenu du film ou autre contenu -->
+      <div class="movie_details">
+        <h1 class="title_movie">{{movies[1].title}}</h1>
+        <p class="title_movie">{{movies[1].overview}}</p>
+        <div class="button">
+          <button class="btn btn-play" (click)="onPlayButtonClicked(movies[1].id);openFullscreen(movies[1].id);"><i class="fa-solid fa-play" style="color: #141414"></i> Play</button>
+          <button class="btn btn-details">More info</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="liste2 slider">
+    <h2 class="title_slider"> Aventure </h2>
+    <div class="carousel">
+      <div class="carousel-container" #carouselbox>
+        <div *ngFor="let movie of adventureMovies; let i = index" class="carousel-item carousel-liste2 crsl2"
+             [ngClass]="{'hover-effect': i === currentIndex && hoverStates[currentIndex] && !isModalOpen(), 'no-hover-effect': i !== currentIndex || !hoverStates[currentIndex]}"
+             (mouseenter)="onHover(true, i); currentIndex = i;" (mouseleave)="onHover(false, i)">
+
+          <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}">
+
+
+        <div class="background-details">
+            <div class="entete">
+              <div class="bloc_1_entete">
+                <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                <div class="plus">+</div>
+                <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+              </div>
+              <div class="end_arrow">
+                <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+              </div>
+            </div>
+            <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+            <div class="bloc_details_modal">
+              <div class="title_details">
+                <div class="title_date">
+                  <div class="bloc_title_1">
+                    <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                    <p class="title">{{ movie.title }} </p>
+
+                    <div class="description">
+                      <p>{{movie.overview}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                  <h3 class="titre_similar">Titres Similaire :</h3>
+                  <div class="bloc_simlar">
+                    <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                      <div class="slmr">
+                        <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                        <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                          <i class="fa-solid fa-play" style="color: #141414"></i>
+                        </button>
+
+                        <div class="entete_similar">
+                          <div class="entete_similar_gauche">
+                            <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                            <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                          </div>
+                          <div class="entete_similar_droite">
+                            <div class="plus">+</div>
+                          </div>
+                        </div>
+                        <div class="paragraphe_similar">
+                          <p>{{similarMovie.overview}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox)"><i class="fas fa-chevron-left"></i>
+      </a>
+      <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox)"><i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
+  </div>
+
+
+  <div class="liste2 slider">
+    <h2 class="title_slider">Nouveautés </h2>
+    <div class="carousel">
+      <div class="carousel-container" #carouselbox2>
+        <div *ngFor="let movie of page2; let j = index" class="carousel-item carousel-liste2 crsl2"
+             [ngClass]="{'hover-effect': 'uniqueID_' + j === currentIndex2 && hoverStates[currentIndex2] && !isModalOpen(), 'no-hover-effect': 'uniqueID_' + j !== currentIndex2 || !hoverStates[currentIndex2]}"
+             (mouseenter)="onHover2(true, 'uniqueID_' + j); currentIndex2 = 'uniqueID_' + j;"
+             (mouseleave)="onHover2(false, 'uniqueID_' + j)">
+          <!-- Votre contenu ici -->
+          <!-- Votre contenu ici -->
+
+        <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+          <div class="background-details">
+            <div class="entete">
+              <div class="bloc_1_entete">
+                <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                <div class="plus">+</div>
+                <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+              </div>
+              <div class="end_arrow">
+                <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+              </div>
+            </div>
+            <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+            <div class="bloc_details_modal">
+              <div class="title_details">
+                <div class="title_date">
+                  <div class="bloc_title_1">
+                    <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                    <p class="title">{{ movie.title }} </p>
+
+                    <div class="description">
+                      <p>{{movie.overview}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                  <h3 class="titre_similar">Titres Similaire :</h3>
+                  <div class="bloc_simlar">
+                    <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                      <div class="slmr">
+                        <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                        <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                          <i class="fa-solid fa-play" style="color: #141414"></i>
+                        </button>
+
+                        <div class="entete_similar">
+                          <div class="entete_similar_gauche">
+                            <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                            <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                          </div>
+                          <div class="entete_similar_droite">
+                            <div class="plus">+</div>
+                          </div>
+                        </div>
+                        <div class="paragraphe_similar">
+                          <p>{{similarMovie.overview}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox2)"><i class="fas fa-chevron-left"></i>
+      </a>
+      <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox2)"><i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
+  </div>
+
+
+    <div class="liste2 slider">
+      <h2 class="title_slider"> Horreur </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox3>
+          <div *ngFor="let movie of category3Movies; let j = index"
+               class="carousel-item carousel-liste2 crsl2"
+               [ngClass]="{'hover-effect': movie.id === currentIndex3 && hoverStates[currentIndex3] && !isModalOpen(), 'no-hover-effect': movie.id !== currentIndex3 || !hoverStates[currentIndex3]}"
+               (mouseenter)="onHover3(true, movie.id);"
+               (mouseleave)="onHover3(false, movie.id)">
+            <!-- Votre contenu ici -->
+
+            <!-- Votre contenu ici -->
+
+          <!-- Votre contenu ici -->
+
+            <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+            <div class="background-details">
+              <div class="entete">
+                <div class="bloc_1_entete">
+                  <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                  <div class="plus">+</div>
+                  <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+                </div>
+                <div class="end_arrow">
+                  <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+              <div class="bloc_details_modal">
+                <div class="title_details">
+                  <div class="title_date">
+                    <div class="bloc_title_1">
+                      <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                      <p class="title">{{ movie.title }} </p>
+
+                      <div class="description">
+                        <p>{{movie.overview}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                    <h3 class="titre_similar">Titres Similaire :</h3>
+                    <div class="bloc_simlar">
+                      <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                        <div class="slmr">
+                          <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                          <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                            <i class="fa-solid fa-play" style="color: #141414"></i>
+                          </button>
+
+                          <div class="entete_similar">
+                            <div class="entete_similar_gauche">
+                              <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                              <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                            </div>
+                            <div class="entete_similar_droite">
+                              <div class="plus">+</div>
+                            </div>
+                          </div>
+                          <div class="paragraphe_similar">
+                            <p>{{similarMovie.overview}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox3)"><i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox3)"><i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+
+
+      <div class="liste2 slider">
+        <h2 class="title_slider"> Film du moment </h2>
+        <div class="carousel">
+          <div class="carousel-container" #carouselbox5>
+            <div *ngFor="let movie of category9Movies; let j = index"
+                 class="carousel-item carousel-liste2 crsl2"
+                 [ngClass]="{'hover-effect': movie.id === currentIndex3 && hoverStates[currentIndex3] && !isModalOpen(), 'no-hover-effect': movie.id !== currentIndex3 || !hoverStates[currentIndex3]}"
+                 (mouseenter)="onHover3(true, movie.id);"
+                 (mouseleave)="onHover3(false, movie.id)">
+              <!-- Votre contenu ici -->
+
+              <!-- Votre contenu ici -->
+
+              <!-- Votre contenu ici -->
+
+              <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+              <div class="background-details">
+                <div class="entete">
+                  <div class="bloc_1_entete">
+                    <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                    <div class="plus">+</div>
+                    <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+                  </div>
+                  <div class="end_arrow">
+                    <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                      <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+                <div class="bloc_details_modal">
+                  <div class="title_details">
+                    <div class="title_date">
+                      <div class="bloc_title_1">
+                        <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                        <p class="title">{{ movie.title }} </p>
+
+                        <div class="description">
+                          <p>{{movie.overview}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                      <h3 class="titre_similar">Titres Similaire :</h3>
+                      <div class="bloc_simlar">
+                        <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                          <div class="slmr">
+                            <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                            <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                              <i class="fa-solid fa-play" style="color: #141414"></i>
+                            </button>
+
+                            <div class="entete_similar">
+                              <div class="entete_similar_gauche">
+                                <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                                <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                              </div>
+                              <div class="entete_similar_droite">
+                                <div class="plus">+</div>
+                              </div>
+                            </div>
+                            <div class="paragraphe_similar">
+                              <p>{{similarMovie.overview}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox5)"><i class="fas fa-chevron-left"></i>
+          </a>
+          <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox5)"><i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+
+
+        <div class="liste2 slider">
+          <h2 class="title_slider"> Seriés US </h2>
+          <div class="carousel">
+            <div class="carousel-container" #carouselbox4>
+              <div *ngFor="let movie of category4Movies; let j = index"
+                   class="carousel-item carousel-liste2 crsl2"
+                   [ngClass]="{'hover-effect': movie.id === currentIndex3 && hoverStates[currentIndex3] && !isModalOpen(), 'no-hover-effect': movie.id !== currentIndex3 || !hoverStates[currentIndex3]}"
+                   (mouseenter)="onHover3(true, movie.id);"
+                   (mouseleave)="onHover3(false, movie.id)">
+                <!-- Votre contenu ici -->
+
+                <!-- Votre contenu ici -->
+
+                <!-- Votre contenu ici -->
+
+                <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+                <div class="background-details">
+                  <div class="entete">
+                    <div class="bloc_1_entete">
+                      <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                      <div class="plus">+</div>
+                      <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+                    </div>
+                    <div class="end_arrow">
+                      <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+                  <div class="bloc_details_modal">
+                    <div class="title_details">
+                      <div class="title_date">
+                        <div class="bloc_title_1">
+                          <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                          <p class="title">{{ movie.title }} </p>
+
+                          <div class="description">
+                            <p>{{movie.overview}}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                        <h3 class="titre_similar">Titres Similaire :</h3>
+                        <div class="bloc_simlar">
+                          <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                            <div class="slmr">
+                              <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                              <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                                <i class="fa-solid fa-play" style="color: #141414"></i>
+                              </button>
+
+                              <div class="entete_similar">
+                                <div class="entete_similar_gauche">
+                                  <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                                  <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                                </div>
+                                <div class="entete_similar_droite">
+                                  <div class="plus">+</div>
+                                </div>
+                              </div>
+                              <div class="paragraphe_similar">
+                                <p>{{similarMovie.overview}}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox4)"><i class="fas fa-chevron-left"></i>
+            </a>
+            <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox4)"><i class="fas fa-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+
+
+          <div class="liste2 slider">
+            <h2 class="title_slider"> Film fantastique </h2>
+            <div class="carousel">
+              <div class="carousel-container" #carouselbox6>
+                <div *ngFor="let movie of category5Movies; let j = index"
+                     class="carousel-item carousel-liste2 crsl2"
+                     [ngClass]="{'hover-effect': movie.id === currentIndex3 && hoverStates[currentIndex3] && !isModalOpen(), 'no-hover-effect': movie.id !== currentIndex3 || !hoverStates[currentIndex3]}"
+                     (mouseenter)="onHover3(true, movie.id);"
+                     (mouseleave)="onHover3(false, movie.id)">
+                  <!-- Votre contenu ici -->
+
+                  <!-- Votre contenu ici -->
+
+                  <!-- Votre contenu ici -->
+
+                  <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+                  <div class="background-details">
+                    <div class="entete">
+                      <div class="bloc_1_entete">
+                        <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                        <div class="plus">+</div>
+                        <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+                      </div>
+                      <div class="end_arrow">
+                        <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                          <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+                    <div class="bloc_details_modal">
+                      <div class="title_details">
+                        <div class="title_date">
+                          <div class="bloc_title_1">
+                            <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                            <p class="title">{{ movie.title }} </p>
+
+                            <div class="description">
+                              <p>{{movie.overview}}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                          <h3 class="titre_similar">Titres Similaire :</h3>
+                          <div class="bloc_simlar">
+                            <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                              <div class="slmr">
+                                <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                                <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                                  <i class="fa-solid fa-play" style="color: #141414"></i>
+                                </button>
+
+                                <div class="entete_similar">
+                                  <div class="entete_similar_gauche">
+                                    <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                                    <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                                  </div>
+                                  <div class="entete_similar_droite">
+                                    <div class="plus">+</div>
+                                  </div>
+                                </div>
+                                <div class="paragraphe_similar">
+                                  <p>{{similarMovie.overview}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox6)"><i class="fas fa-chevron-left"></i>
+              </a>
+              <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox6)"><i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+
+  <div class="liste2 slider">
+    <h2 class="title_slider"> Intrigue </h2>
+    <div class="carousel">
+      <div class="carousel-container" #carouselbox8>
+        <div *ngFor="let movie of category7Movies; let j = index"
+             class="carousel-item carousel-liste2 crsl2"
+             [ngClass]="{'hover-effect': movie.id === currentIndex3 && hoverStates[currentIndex3] && !isModalOpen(), 'no-hover-effect': movie.id !== currentIndex3 || !hoverStates[currentIndex3]}"
+             (mouseenter)="onHover3(true, movie.id);"
+             (mouseleave)="onHover3(false, movie.id)">
+          <!-- Votre contenu ici -->
+
+          <!-- Votre contenu ici -->
+
+          <!-- Votre contenu ici -->
+
+          <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+          <div class="background-details">
+            <div class="entete">
+              <div class="bloc_1_entete">
+                <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                <div class="plus">+</div>
+                <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+              </div>
+              <div class="end_arrow">
+                <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+              </div>
+            </div>
+            <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+            <div class="bloc_details_modal">
+              <div class="title_details">
+                <div class="title_date">
+                  <div class="bloc_title_1">
+                    <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                    <p class="title">{{ movie.title }} </p>
+
+                    <div class="description">
+                      <p>{{movie.overview}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                  <h3 class="titre_similar">Titres Similaire :</h3>
+                  <div class="bloc_simlar">
+                    <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                      <div class="slmr">
+                        <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                        <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                          <i class="fa-solid fa-play" style="color: #141414"></i>
+                        </button>
+
+                        <div class="entete_similar">
+                          <div class="entete_similar_gauche">
+                            <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                            <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                          </div>
+                          <div class="entete_similar_droite">
+                            <div class="plus">+</div>
+                          </div>
+                        </div>
+                        <div class="paragraphe_similar">
+                          <p>{{similarMovie.overview}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox8)"><i class="fas fa-chevron-left"></i>
+      </a>
+      <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox8)"><i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
+  </div>
+
+
+  <div class="liste2 slider">
+    <h2 class="title_slider"> Film d'action </h2>
+    <div class="carousel">
+      <div class="carousel-container" #carouselbox7>
+        <div *ngFor="let movie of category6Movies; let j = index"
+             class="carousel-item carousel-liste2 crsl2"
+             [ngClass]="{'hover-effect': movie.id === currentIndex3 && hoverStates[currentIndex3] && !isModalOpen(), 'no-hover-effect': movie.id !== currentIndex3 || !hoverStates[currentIndex3]}"
+             (mouseenter)="onHover3(true, movie.id);"
+             (mouseleave)="onHover3(false, movie.id)">
+          <!-- Votre contenu ici -->
+
+          <!-- Votre contenu ici -->
+
+          <!-- Votre contenu ici -->
+
+          <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+          <div class="background-details">
+            <div class="entete">
+              <div class="bloc_1_entete">
+                <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                <div class="plus">+</div>
+                <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+              </div>
+              <div class="end_arrow">
+                <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+              </div>
+            </div>
+            <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+            <div class="bloc_details_modal">
+              <div class="title_details">
+                <div class="title_date">
+                  <div class="bloc_title_1">
+                    <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                    <p class="title">{{ movie.title }} </p>
+
+                    <div class="description">
+                      <p>{{movie.overview}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                  <h3 class="titre_similar">Titres Similaire :</h3>
+                  <div class="bloc_simlar">
+                    <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                      <div class="slmr">
+                        <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                        <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                          <i class="fa-solid fa-play" style="color: #141414"></i>
+                        </button>
+
+                        <div class="entete_similar">
+                          <div class="entete_similar_gauche">
+                            <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                            <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                          </div>
+                          <div class="entete_similar_droite">
+                            <div class="plus">+</div>
+                          </div>
+                        </div>
+                        <div class="paragraphe_similar">
+                          <p>{{similarMovie.overview}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox7)"><i class="fas fa-chevron-left"></i>
+      </a>
+      <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox7)"><i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
+  </div>
+
+
+
+
+  <div class="liste2 slider">
+    <h2 class="title_slider"> Comédie </h2>
+    <div class="carousel">
+      <div class="carousel-container" #carouselbox9>
+        <div *ngFor="let movie of category8Movies; let j = index"
+             class="carousel-item carousel-liste2 crsl2"
+             [ngClass]="{'hover-effect': movie.id === currentIndex3 && hoverStates[currentIndex3] && !isModalOpen(), 'no-hover-effect': movie.id !== currentIndex3 || !hoverStates[currentIndex3]}"
+             (mouseenter)="onHover3(true, movie.id);"
+             (mouseleave)="onHover3(false, movie.id)">
+          <!-- Votre contenu ici -->
+
+          <!-- Votre contenu ici -->
+
+          <!-- Votre contenu ici -->
+
+          <img  [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title}" />
+          <div class="background-details">
+            <div class="entete">
+              <div class="bloc_1_entete">
+                <div class="play" (click)="onPlayButtonClicked(movie.id)"><i class="fa-solid fa-play" (click)="onPlayButtonClicked(movie.id);openFullscreen(movie.id);"></i></div>
+                <div class="plus">+</div>
+                <div class="like"><i class="fa-regular fa-thumbs-up"></i></div>
+              </div>
+              <div class="end_arrow">
+                <div class="arrrow_down modal" (click)="toggleModal($event, movie.id); loadSimilarMovies(movie.id)">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+              </div>
+            </div>
+            <div class="close" (click)="toggleModal($event, movie.id)"><i class="fa-solid fa-x"></i></div>
+            <div class="bloc_details_modal">
+              <div class="title_details">
+                <div class="title_date">
+                  <div class="bloc_title_1">
+                    <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                    <p class="title">{{ movie.title }} </p>
+
+                    <div class="description">
+                      <p>{{movie.overview}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="similarMovies.length > 0 " class="bloc_similar_movie">
+                  <h3 class="titre_similar">Titres Similaire :</h3>
+                  <div class="bloc_simlar">
+                    <div class="similar_movie_bloc" *ngFor="let similarMovie of similarMovies">
+                      <div class="slmr">
+                        <img [src]="tmdbBackdropUrl + similarMovie.backdrop_path" alt="{{ movie.title }}"/>
+                        <button class="btn btn-play" (click)="onPlayButtonClicked(similarMovie.id);openFullscreen(similarMovie.id);">
+                          <i class="fa-solid fa-play" style="color: #141414"></i>
+                        </button>
+
+                        <div class="entete_similar">
+                          <div class="entete_similar_gauche">
+                            <p class="rd">Recommandé à {{ generateRandomPercentage() }}%</p>
+                            <p class="date"> {{ similarMovie.release_date | date:'yyyy' }}</p>
+                          </div>
+                          <div class="entete_similar_droite">
+                            <div class="plus">+</div>
+                          </div>
+                        </div>
+                        <div class="paragraphe_similar">
+                          <p>{{similarMovie.overview}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1,'carousel-liste2',carouselbox9)"><i class="fas fa-chevron-left"></i>
+      </a>
+      <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1,'carousel-liste2',carouselbox9)"><i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
+  </div>
+
+
+  <!--
+    <div class="liste2 slider">
+      <h2 class="title_slider">Aventure</h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox3>
+          <div *ngFor="let movie of category3Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox3)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox3)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider">Horreur</h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox4>
+          <div *ngFor="let movie of category4Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox4)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox4)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider">Série US </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox5>
+          <div *ngFor="let movie of category5Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox5)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox5)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider"> Film Fantastique </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox6>
+          <div *ngFor="let movie of category6Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox6)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox6)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider"> Film d'action </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox7>
+          <div *ngFor="let movie of category7Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox7)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox7)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider"> Série d'horreur </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox8>
+          <div *ngFor="let movie of category8Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox8)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox8)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider"> Intrigues </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox9>
+          <div *ngFor="let movie of category9Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox9)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox9)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider"> Série français </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox10>
+          <div *ngFor="let movie of category10Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox10)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox10)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="liste2 slider">
+      <h2 class="title_slider"> Coemdié </h2>
+      <div class="carousel">
+        <div class="carousel-container" #carouselbox11>
+          <div *ngFor="let movie of category11Movies" class="carousel-item">
+            <img [src]="tmdbBackdropUrl + movie.backdrop_path" alt="{{ movie.title }}" />
+          </div>
+        </div>
+
+        <a href="javascript:void(0);" class="switchLeft sliderButton" (click)="slide(-1, 'carousel-item', carouselbox11)">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="switchRIGHT sliderButton" (click)="slide(1, 'carousel-item', carouselbox11)">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+-->
+
+    <footer>
+      <div class="bloc_footer">
+        <div class="grand_bloc_footer">
+          <div class="">
+          <ul class="reseaux">
+            <li><i class="fa-brands fa-twitter"></i></li>
+            <li><i class="fa-brands fa-youtube"></i></li>
+            <li></li>
+          </ul>
+          <div class="bloc_3_footer">
+            <p> Audiodescription</p>
+            <p> Relation Investisseurs</p>
+            <p> Confidentialité</p>
+            <p> Nous contacter </p>
+          </div>
+          </div>
+          <div class="blo_2_footer">
+            <p>Cartes cadeaux</p>
+            <p>Boutique Netflix</p>
+            <p>Préference de cookies</p>
+          </div>
+          <div class="bloc_3_footer">
+            <p> Presse </p>
+            <p> Conditions d'utilisation </p>
+            <p> Mention légales </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+     <div class=
+    "modal-backdrop"></div>
+ <!-- </div>
+
+
+  !-->
